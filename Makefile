@@ -83,6 +83,7 @@ EXAMPLES = examples/ex_serial.$(TYPE) \
 	   examples/ex_vmsfscheck.$(TYPE) \
 	   examples/ex_gtext.$(TYPE) \
 	   examples/ex_showpvr.$(TYPE) \
+	   examples/ex_memtest.$(TYPE) \
 	   examples/ex_malloc.$(TYPE) \
 	   examples/ex_purupuru.$(TYPE) \
 	   examples/ex_compress.$(TYPE) \

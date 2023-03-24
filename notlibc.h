@@ -10,6 +10,11 @@
 #include "common.h"
 START_EXTERN_C
 
+extern uint32_t _mem_top;
+#define HW_MEM_16           16777216
+#define HW_MEM_32           33554432
+#define HW_MEMSIZE          (_mem_top - 0x8c000000)
+#define DBL_MEM             (_mem_top - 0x8d000000)
 
 void exit(int rcode) /*__THROW*/ __attribute__ ((__noreturn__));
 void free(void *ptr);

@@ -6,13 +6,13 @@
 
 	
 	.globl	start
-	
+	.globl	__mem_top
 	.text
 
 start:
 	! First, make sure to run in the P2 area
         
-       	mov.l	setup_cache_addr,r0
+	mov.l	setup_cache_addr,r0
 	mov.l	p2_mask,r1
 	or	r1,r0
 	jmp	@r0
@@ -39,7 +39,28 @@ setup_cache:
 
 
 init:
-	mov.l	stack_pointer,r15
+	mov.l	stack_pointer_16m,r15
+	! Check if 0xadffffff is a mirror of 0xacffffff, or if unique
+	! If unique, then memory is 32MB instead of 16MB, and we must
+	! set up new stack even higher
+	mov.l	p2_mask,r0
+	mov	r0,r2
+	or	r15,r2
+	mov	#0xba,r1
+	mov.b	r1,@-r2			! Store 0xba to 0xacffffff
+	mov.l	stack_pointer_32m,r1
+	or	r0,r1
+	mov	#0xab,r0
+	mov.b	r0,@-r1			! Store 0xab in 0xadffffff
+	mov.b	@r1,r0
+	mov.b	@r2,r1			! Reloaded values
+	cmp/eq	r0,r1			! Check if values match
+	bt	memchk_done		! If so, mirror - we're done, move on
+	mov.l	stack_pointer_32m,r15	! If not, unique - set higher stack
+memchk_done:
+	mov.l	mem_top_addr,r0
+	mov.l	r15,@r0			! Save address of top of memory
+
 	mov.l	bss_start_addr,r0
 	mov.l	bss_end_addr,r2
 	sub	r0,r2
@@ -108,10 +129,16 @@ dcload_syscall:
 	.long	0x8c004008
 old_stack:
 	.long	0
-stack_pointer:
+stack_pointer_16m:
 	.long	0x8cfffffc
+stack_pointer_32m:
+	.long	0x8dfffffc
 p2_mask:
 	.long	0xa0000000
+__mem_top:
+	.long 0
+mem_top_addr:
+	.long __mem_top
 setup_cache_addr:
 	.long	setup_cache
 init_addr:

@@ -148,7 +148,7 @@ void exit(int rcode)
  */
 extern char end[];
 #define MEMSTART ((int)end)
-#define MEMEND   0x8cff0000
+#define MEMEND   (_mem_top - 0x10000)
 static int total_size;
 
 #ifndef OLDMALLOC
