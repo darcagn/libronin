@@ -16,7 +16,9 @@
 # To install in $HOME instead of /usr/local, use:
 #    make install prefix=$HOME
 
-CC = sh-elf-gcc
+SH_ELF_BIN  = /opt/toolchains/dc/sh-elf/bin
+
+CC = $(SH_ELF_BIN)/sh-elf-gcc
 
 OPTIMISE=-O4 -ffreestanding -ffast-math -fschedule-insns2 -fomit-frame-pointer -fno-inline-functions -fno-defer-pop -fforce-addr -fstrict-aliasing -funroll-loops -fdelete-null-pointer-checks -fno-exceptions
 
@@ -42,8 +44,8 @@ SHAREDLIB=libz.so
 SHAREDLIBV=libz.so.1.2.3
 SHAREDLIBM=libz.so.1
 
-AR=sh-elf-ar rc
-RANLIB=sh-elf-ranlib
+AR=$(SH_ELF_BIN)/sh-elf-ar rc
+RANLIB=$(SH_ELF_BIN)/sh-elf-ranlib
 TAR=tar
 SHELL=/bin/sh
 EXE=
